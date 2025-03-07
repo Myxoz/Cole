@@ -8,6 +8,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -56,7 +57,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -484,7 +487,19 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
         ) {
             Slider(
                 state,
-                Modifier.fillMaxWidth(.8f)
+                Modifier.fillMaxWidth(.8f),
+                track = {
+                    val percentVal = (it.value-it.valueRange.start)/(it.valueRange.endInclusive-it.valueRange.start)
+                    Canvas(Modifier.fillMaxWidth()) {
+                        drawLine(Color.Red, Offset(0f, 0f), Offset(percentVal*size.width, 0f), 10f, StrokeCap.Round)
+                        drawLine(Colors.SFONT, Offset(percentVal*size.width, 0f), Offset(size.width, 0f), 10f, StrokeCap.Round)
+                    }
+                },
+                thumb = {
+                    Box(
+                        Modifier.background(Color.Red, CircleShape).size(20.dp)
+                    )
+                }
             )
             Text(
                 displayedValue(state.value.roundToInt()),
