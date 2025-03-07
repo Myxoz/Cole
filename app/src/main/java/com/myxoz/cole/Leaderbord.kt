@@ -2,6 +2,8 @@ package com.myxoz.cole
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,9 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,14 +69,14 @@ fun Leaderboard(topPeople: List<ScoredPerson>?) {
                 ) {
                     Text(
                         "4. ${topPeople[3].full} • ${topPeople[3].score}",
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = MaterialTheme.typography.titleSmall.copy(
                             topPeople[3].score.getColor(max)
                         )
                     )
                     if(topPeople.size > 4) {
                         Text(
                             "5. ${topPeople[4].full} • ${topPeople[4].score}",
-                            style = MaterialTheme.typography.titleMedium.copy(
+                            style = MaterialTheme.typography.titleSmall.copy(
                                 topPeople[4].score.getColor(max)
                             )
                         )
@@ -106,7 +111,7 @@ fun RowScope.Tower(person: ScoredPerson, max: Int){
             Text(
                 person.short,
                 Modifier.align(Alignment.Center),
-                style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
+                style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
             )
         }
         Spacer(Modifier.height(5.dp))
@@ -115,11 +120,13 @@ fun RowScope.Tower(person: ScoredPerson, max: Int){
             Modifier
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
+            style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
         )
         Box(
             Modifier
                 .fillMaxWidth(.8f)
+                .clip(RoundedCornerShape(25.dp))
+                .clickable(interactionSource = remember { MutableInteractionSource() }, remember { ripple() }) {  }
                 .height(
                     (((person.score/max.toFloat())*150).dp)
                 )

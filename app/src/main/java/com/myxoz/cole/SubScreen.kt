@@ -3,7 +3,6 @@ package com.myxoz.cole
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -134,7 +133,6 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                     Spacer(Modifier.height(10.dp))
                     Row(
                         Modifier
-                            .padding(horizontal = 20.dp)
                             .clip(CircleShape)
                             .clickable {
                                 closeSubScreen()
@@ -143,7 +141,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Icon(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, "back", tint = Colors.FONT, modifier = Modifier.size(40.dp))
-                        Text(subScreen.name, style = MaterialTheme.typography.headlineMedium.copy(Colors.FONT))
+                        Text(subScreen.name, style = MaterialTheme.typography.headlineSmall.copy(Colors.FONT))
                     }
                     val people = content?.entries
                         ?.groupBy { it.short }?.values
@@ -159,79 +157,6 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                         cal.timeInMillis=it.end*1000L
                         "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH)}-${cal.get(Calendar.DATE)}"
                     }
-                    groupedByDates?.forEach {
-                        Spacer(Modifier.height(10.dp))
-                        cal.timeInMillis = it.value[0].end*1000L
-                        val dateString =
-                            weekDays[cal.get(Calendar.DAY_OF_WEEK)] + " der " +
-                                    cal.get(Calendar.DAY_OF_MONTH) +"." + (cal.get(Calendar.MONTH)).plus(1) +
-                                    cal.get(Calendar.YEAR).let { itemYear -> if(itemYear==currentYear) "" else ".${itemYear}" }
-                        Text(
-                            dateString,
-                            style = MaterialTheme.typography.titleMedium.copy(Colors.SFONT)
-                        )
-                        Column(
-                            Modifier
-                                .clip(RoundedCornerShape(30.dp))
-                                .background(Colors.SEC)
-                        ) {
-                            it.value.sortedBy { it.end }.forEachIndexed { index, item ->
-                                cal.timeInMillis = item.end * 1000L
-                                var isExpanded by remember { mutableStateOf(false) }
-                                if(index!=0) HorizontalDivider()
-                                Surface (
-                                    {isExpanded=!isExpanded},
-                                    Modifier
-                                        .animateContentSize(),
-                                    color = Color.Transparent,
-                                    shape = RoundedCornerShape(30.dp)
-                                ) {
-                                    Column(
-                                        Modifier.padding(15.dp)
-                                    ) {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Box(
-                                                Modifier
-                                                    .border(4.dp, (people?.find { it.short==item.short }?.score?:0).getColor(people?.getOrNull(0)?.score?:1),CircleShape)
-                                                    .size(35.dp)
-                                            ) {
-                                                Text(
-                                                    item.short,
-                                                    modifier = Modifier.align(Alignment.Center),
-                                                    style = MaterialTheme.typography.titleSmall.copy(Colors.FONT)
-                                                )
-                                            }
-                                            Spacer(Modifier.width(15.dp))
-                                            Text(
-                                                item.full,
-                                                style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
-                                            )
-                                            Spacer(Modifier.weight(1f))
-                                            Text(
-                                                "${cal.get(Calendar.HOUR_OF_DAY).toString().padStart(2,'0')}:${cal.get(Calendar.MINUTE).toString().padStart(2,'0')} · ${item.length.asHour()} lang · ${item.productivity}0%",
-                                                style = MaterialTheme.typography.titleMedium.copy(Colors.SFONT)
-                                            )
-                                            Spacer(Modifier.width(15.dp))
-                                            Text(
-                                                item.getScore().toString(),
-                                                style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
-                                            )
-                                        }
-                                        if(isExpanded){
-                                            Column(
-                                                Modifier
-                                                    .padding(start = 50.dp)
-                                            ) {
-                                                Text(
-                                                    "Zusammenfassung:",
-                                                    style = MaterialTheme.typography.titleSmall.copy(Colors.SFONT)
-                                                )
-                                                Text(
-                                                    item.summary,
-                                                    style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
-                                                )
                     Column {
                         groupedByDates?.forEach {
                             cal.timeInMillis = it.value[0].end*1000L
@@ -401,7 +326,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                 .fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ){
-                            Text("Zusammenfassung", style = MaterialTheme.typography.titleLarge.copy(Colors.FONT))
+                            Text("Zusammenfassung", style = MaterialTheme.typography.titleMedium.copy(Colors.FONT))
                             Row(
                                 Modifier
                                     .fillMaxWidth(),
@@ -418,7 +343,8 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                         unfocusedContainerColor = Colors.SEC,
                                         focusedContainerColor = Colors.SEC,
                                         focusedTextColor = Colors.FONT,
-                                        unfocusedTextColor = Colors.FONT
+                                        unfocusedTextColor = Colors.FONT,
+                                        unfocusedIndicatorColor = Color.Transparent,
                                     ),
                                     keyboardOptions = KeyboardOptions(
                                         capitalization = KeyboardCapitalization.Sentences,
@@ -427,9 +353,10 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                     placeholder = {
                                         Text(
                                             "Knappe Zusammenfassung",
-                                            style = MaterialTheme.typography.titleMedium.copy(Colors.SFONT)
+                                            style = MaterialTheme.typography.titleSmall.copy(Colors.SFONT)
                                         )
-                                    }
+                                    },
+                                    maxLines = 1,
                                 )
                             }
                         }
@@ -461,7 +388,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                 ) {
                                     Text(
                                         "Eintragen",
-                                        style = MaterialTheme.typography.titleLarge.copy(Color.Black)
+                                        style = MaterialTheme.typography.titleSmall.copy(Color.Black)
                                     )
                                 }
                             }
@@ -548,7 +475,7 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
         Modifier
             .fillMaxWidth()
     ){
-        Text(name, style = MaterialTheme.typography.titleLarge.copy(Colors.FONT))
+        Text(name, style = MaterialTheme.typography.titleMedium.copy(Colors.FONT))
         Row(
             Modifier
                 .fillMaxWidth(),
@@ -561,7 +488,7 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
             )
             Text(
                 displayedValue(state.value.roundToInt()),
-                style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
+                style = MaterialTheme.typography.titleSmall.copy(Colors.FONT)
             )
         }
     }

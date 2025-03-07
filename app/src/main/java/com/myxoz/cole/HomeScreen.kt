@@ -68,7 +68,7 @@ fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, 
                         .padding(horizontal = 20.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    Text("All-Time", style = MaterialTheme.typography.headlineSmall.copy(Colors.FONT))
+                    Text("All-Time", style = MaterialTheme.typography.titleLarge.copy(Colors.FONT))
                     Leaderboard(content?.topPeople)
                     Spacer(Modifier)
                     val subContent = content

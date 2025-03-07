@@ -40,7 +40,7 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
             ) {
                 Text(
                     topic.name,
-                    style = MaterialTheme.typography.headlineSmall.copy(Colors.FONT)
+                    style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
                 )
                 Text(
                     topic.totalScore.toString(),
@@ -57,7 +57,7 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
                         topic.topPeople.getOrNull(it)?.apply {
                             Text(
                                 "${it+1}. $full · $score",
-                                style = MaterialTheme.typography.titleSmall.copy(
+                                style = MaterialTheme.typography.bodySmall.copy(
                                     score.getColor(max)
                                 )
                             )
