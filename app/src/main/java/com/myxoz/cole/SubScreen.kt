@@ -102,13 +102,20 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
     var isFetching by remember { mutableStateOf(false) }
     LaunchedEffect(subScreen.id, lastTimeAdded) {
         val fetchedContent = api.getTopicContent(subScreen.id)
-        isFetching=false
-        if(fetchedContent==null){
+        if(fetchedContent.status == FetchStatus.OFFLINE) {
+            toastOnMain(context, "Offline", Toast.LENGTH_SHORT)
+        } else if(
+            fetchedContent.status == FetchStatus.FAILED ||
+            fetchedContent.status == FetchStatus.STATUS_CODE_NOT_OK ||
+            fetchedContent.content == null ||
+            !fetchedContent.isJson()
+        ) {
             toastOnMain(context, "Thema kann nicht neugeladen werden", Toast.LENGTH_LONG)
         } else {
-            content = fetchedContent
-            prefs.edit().putString(SPK.getContentKey(subScreen.id), fetchedContent.json()).apply()
+            content = fetchedContent.content.getAsTopicContent()
+            prefs.edit().putString(SPK.getContentKey(subScreen.id), fetchedContent.content).apply()
         }
+        isFetching=false
     }
     Scaffold(
         containerColor = Colors.BACK

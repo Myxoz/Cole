@@ -96,17 +96,21 @@ fun RegisterScreen(context: Context, updateAfterLogin: (String, String, Int, Str
                         isFetching=true
                         CoroutineScope(EmptyCoroutineContext).launch {
                             val response = API.getToken(nameValue, shortValue)
-                            if(response=="Already exists") {
+                            if(response.status==FetchStatus.OFFLINE) {
+                                toastOnMain(context, "Offline", Toast.LENGTH_SHORT)
+                            } else if(response.content=="Already exists") {
                                 toastOnMain(context, "Diese Kurzform hat bereits jemand anderes", Toast.LENGTH_LONG)
-                                isFetching=false
+                            } else if(
+                                response.status==FetchStatus.FAILED ||
+                                response.status == FetchStatus.STATUS_CODE_NOT_OK ||
+                                response.content == null ||
+                                response.content.length !in 17..20
+                            ) {
+                                toastOnMain(context, "Etwas ist schiefgelaufen, versuche es später erneut", Toast.LENGTH_LONG)
                             } else {
-                                if(response == null || response.length !in 17..20) {
-                                    toastOnMain(context, "Etwas ist schiefgelaufen, versuche es später erneut", Toast.LENGTH_LONG)
-                                    isFetching=false
-                                } else {
-                                    updateAfterLogin(response.substringBefore(";"), nameValue, response.substringAfter(";").toIntOrNull()?:-1, shortValue)
-                                }
+                                updateAfterLogin(response.content.substringBefore(";"), nameValue, response.content.substringAfter(";").toIntOrNull()?:-1, shortValue)
                             }
+                            isFetching = false
                         }
                     },
                     enabled = nameValue.isNotEmpty() && shortValue.isNotEmpty() && !isFetching

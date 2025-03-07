@@ -38,11 +38,16 @@ fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, 
     LaunchedEffect(lastRefreshedTs) {
         val fetchedContent = api.getHomeScreenContent()
         isRefreshing=false
-        if(fetchedContent==null){
-            toastOnMain(applicationContext,"Themen und All-Time stats können nicht abgerufen werden", Toast.LENGTH_LONG)
-        } else {
-            content = fetchedContent
-            prefs.edit().putString(SPK.HOME, fetchedContent.json()).apply()
+        if(fetchedContent.status== FetchStatus.OFFLINE) {
+            toastOnMain(applicationContext, "Offline", Toast.LENGTH_SHORT)
+        } else if(
+            fetchedContent.status== FetchStatus.FAILED ||
+            !fetchedContent.isJson()
+        ){
+            toastOnMain(applicationContext,"Themen und Statistiken können nicht abgerufen werden", Toast.LENGTH_LONG)
+        } else if(fetchedContent.content!=null){
+            content = fetchedContent.content.getAsHomeScreen()
+            prefs.edit().putString(SPK.HOME, fetchedContent.content).apply()
         }
     }
     Scaffold(
