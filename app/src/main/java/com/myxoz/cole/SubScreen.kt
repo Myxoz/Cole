@@ -4,6 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -227,6 +232,108 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                                     item.summary,
                                                     style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
                                                 )
+                    Column {
+                        groupedByDates?.forEach {
+                            cal.timeInMillis = it.value[0].end*1000L
+                            val dateString =
+                                weekDays[cal.get(Calendar.DAY_OF_WEEK)] + " der " +
+                                        cal.get(Calendar.DAY_OF_MONTH) +"." + (cal.get(Calendar.MONTH)).plus(1) +
+                                        cal.get(Calendar.YEAR).let { itemYear -> if(itemYear==currentYear) "" else ".${itemYear}" }
+                            Spacer(Modifier.height(20.dp))
+                            Text(
+                                dateString,
+                                style = MaterialTheme.typography.bodyMedium.copy(Colors.SFONT)
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Column(
+                                Modifier
+                                    .clip(RoundedCornerShape(30.dp))
+                                    .background(Colors.SEC)
+                            ) {
+                                it.value.sortedBy { it.end }.forEachIndexed { index, item ->
+                                    var isExpanded by remember { mutableStateOf(false) }
+                                    if(index!=0) HorizontalDivider()
+                                    Surface (
+                                        {isExpanded=!isExpanded},
+                                        color = Color.Transparent,
+                                        shape = RoundedCornerShape(30.dp)
+                                    ) {
+                                        cal.timeInMillis = item.end * 1000L - item.length * 30L*1000L*60L
+                                        Column(
+                                            Modifier.padding(15.dp)
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Box(
+                                                    Modifier
+                                                        .border(
+                                                            4.dp,
+                                                            (people?.find { it.short == item.short }?.score
+                                                                ?: 0).getColor(
+                                                                people?.getOrNull(0)?.score ?: 1
+                                                            ),
+                                                            CircleShape
+                                                        )
+                                                        .size(35.dp)
+                                                ) {
+                                                    Text(
+                                                        item.short,
+                                                        modifier = Modifier.align(Alignment.Center),
+                                                        style = MaterialTheme.typography.labelSmall.copy(
+                                                            Colors.FONT
+                                                        )
+                                                    )
+                                                }
+                                                Spacer(Modifier.width(15.dp))
+                                                Text(
+                                                    item.full,
+                                                    style = MaterialTheme.typography.titleMedium.copy(
+                                                        Colors.FONT
+                                                    )
+                                                )
+                                                Spacer(Modifier.weight(1f))
+                                                Text(
+                                                    "${
+                                                        cal.get(Calendar.HOUR_OF_DAY).toString()
+                                                            .padStart(2, '0')
+                                                    }:${
+                                                        cal.get(Calendar.MINUTE).toString()
+                                                            .padStart(2, '0')
+                                                    } · ${item.length.asHour()} lang · ${item.productivity}0%",
+                                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                                        Colors.SFONT
+                                                    )
+                                                )
+                                                Spacer(Modifier.width(15.dp))
+                                                Text(
+                                                    item.getScore().toString(),
+                                                    style = MaterialTheme.typography.titleLarge.copy(
+                                                        Colors.FONT
+                                                    )
+                                                )
+                                            }
+                                            AnimatedVisibility(
+                                                visible = isExpanded,
+                                                enter = fadeIn() + expandVertically(),
+                                                exit = fadeOut() + shrinkVertically()
+                                            ) {
+                                                Column(
+                                                    Modifier.padding(start = 50.dp)
+                                                ) {
+                                                    Text(
+                                                        "Zusammenfassung:",
+                                                        style = MaterialTheme.typography.titleSmall.copy(
+                                                            Colors.SFONT
+                                                        )
+                                                    )
+                                                    Text(
+                                                        item.summary,
+                                                        style = MaterialTheme.typography.titleMedium.copy(
+                                                            Colors.FONT
+                                                        )
+                                                    )
+                                                }
                                             }
                                         }
                                     }
