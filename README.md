@@ -5,8 +5,10 @@ Die Idee hinter der App ist, dass man mehr Motivation zum Lernen hat, wenn man s
 
 ## Screenshots
 
-![Homescreen](./home.png)
-![Sub-Page](./sub.png)
+<div style="display: flex; gap: 10px;">
+    <img src="./home.png" alt="Homescreen" style="width: 45%;">
+    <img src="./sub.png" alt="Sub-Page" style="width: 45%;">
+</div>
 
 ## API
 
