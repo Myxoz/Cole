@@ -43,7 +43,7 @@ class API(val token: String, val id: Int) {
         }
         private suspend fun fetch(url: String): FetchResult {
             var response: String? = null
-            var responseCode: FetchStatus = FetchStatus.FAILED
+            var responseCode: FetchStatus
             withContext(Dispatchers.IO){
                 println("Fetching: $url")
                 try {

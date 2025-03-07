@@ -80,6 +80,7 @@ fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, 
                     subContent?.topics?.forEach {
                         TopicBoard(it,openSubScreen)
                     }
+                    Spacer(Modifier)
                 }
             }
         }

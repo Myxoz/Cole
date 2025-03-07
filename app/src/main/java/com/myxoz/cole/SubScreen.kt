@@ -276,6 +276,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                             }
                         }
                     }
+                    Spacer(Modifier.height(20.dp))
                 }
             }
             FloatingActionButton(
