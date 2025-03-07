@@ -78,7 +78,7 @@ class API(val token: String, val id: Int) {
 }
 class FetchResult(val content: String?, val status: FetchStatus){
     fun isJson(): Boolean{
-        if(content==null) return false;
+        if(content==null) return false
         return try {
             JSONObject(content)
             true

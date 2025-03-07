@@ -64,7 +64,8 @@ fun RegisterScreen(context: Context, updateAfterLogin: (String, String, Int, Str
             )
             TextField(
                 nameValue,
-                {nameValue=it;
+                {
+                    nameValue=it
                     if(!wasShortValueEdited) {
                         shortValue = (if(nameValue.length < 3) nameValue else if((nameValue.getOrNull(2) ?: 'l') in "aeioue".toCharArray()){
                             it.substring(0..2)
