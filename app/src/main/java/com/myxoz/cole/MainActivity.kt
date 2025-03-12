@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.toArgb
 
 class MainActivity : ComponentActivity() {
     private lateinit var prefs: SharedPreferences
@@ -29,7 +30,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(0xFFFFFF))
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(0xFFFFFF),
+            navigationBarStyle = SystemBarStyle.dark(Colors.BACK.toArgb())
+        )
         setContent {
             prefs = getSharedPreferences(localClassName, MODE_PRIVATE)
             var privateToken by remember{ mutableStateOf(prefs.getString(SPK.TOKEN, null)) }
