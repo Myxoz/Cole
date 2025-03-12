@@ -41,6 +41,9 @@ class API(val token: String, val id: Int) {
         suspend fun getToken(name: String, short: String): FetchResult {
             return fetch(ENV.API_ROOT+"name=${e(name)}&short=${e(short)}&method=create")
         }
+        suspend fun getLoginToken(code: String): FetchResult {
+            return fetch(ENV.API_ROOT+"code=$code&method=login")
+        }
         private suspend fun fetch(url: String): FetchResult {
             var response: String? = null
             var responseCode: FetchStatus
