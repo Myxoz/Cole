@@ -183,11 +183,16 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                             Column(
                                 Modifier
                                     .clip(RoundedCornerShape(30.dp))
-                                    .background(Colors.SEC)
+                                    .background(Colors.SEC),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 it.value.sortedBy { it.end }.forEachIndexed { index, item ->
                                     var isExpanded by remember { mutableStateOf(false) }
-                                    if(index!=0) HorizontalDivider()
+                                    if(index!=0) HorizontalDivider(
+                                        Modifier
+                                            .padding(horizontal = 15.dp),
+                                        color = Colors.TFONT
+                                    )
                                     Surface (
                                         {isExpanded=!isExpanded},
                                         color = Color.Transparent,
