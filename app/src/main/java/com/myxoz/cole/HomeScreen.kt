@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
@@ -81,7 +82,7 @@ fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, 
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     var code by remember { mutableStateOf(ENV.getLoginOTP(api.token, api.id)) }
-                    Text("Gib diesen Code auf deinem anderen Gerät ein:", color = Colors.SFONT)
+                    Text("Gib diesen Code auf deinem anderen Gerät ein:", color = Colors.SFONT, textAlign = TextAlign.Center)
                     Text(
                         code,
                         style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
@@ -109,7 +110,9 @@ fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, 
                         LinearProgressIndicator(
                             {
                                 timeLeft/90.toFloat()
-                            }
+                            },
+                            modifier = Modifier
+                                .weight(1f)
                         )
                         Text("${timeLeft.toInt()}s", color = Colors.SFONT)
                     }
