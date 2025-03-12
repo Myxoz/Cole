@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
             var full by remember { mutableStateOf(prefs.getString(SPK.FULL, null)?:"Error Person") }
             var subScreen by remember { mutableStateOf(prefs.getString(SPK.SUBSCREEN, null).getAsSubScreen()) }
             var renderedSubScreen by remember { mutableStateOf(subScreen?:SubScreen(-1,"")) }
+            backPressed = { subScreen = null; backPressed = {} }
             val updateAfterLogin = {
                 token: String, name: String, idName: Int, shortName: String ->
                     privateToken = token
@@ -65,7 +66,6 @@ class MainActivity : ComponentActivity() {
                     subScreen = it
                     prefs.edit().putString(SPK.SUBSCREEN, it.json()).apply()
                     renderedSubScreen = it;
-                    backPressed = { subScreen = null; backPressed = {} }
                 }
                 AnimatedVisibility(
                     subScreen!=null,
