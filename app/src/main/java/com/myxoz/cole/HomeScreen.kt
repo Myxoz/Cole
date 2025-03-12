@@ -122,13 +122,13 @@ fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, 
         ) {
             Column(
                 Modifier
+                    .verticalScroll(rememberScrollState())
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(20.dp))
                 Column(
                     Modifier
-                        .verticalScroll(rememberScrollState())
                         .width(500.dp)
                         .padding(horizontal = 20.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)

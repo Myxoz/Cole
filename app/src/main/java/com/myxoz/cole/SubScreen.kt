@@ -129,13 +129,14 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
         ) {
             Column(
                 Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .align(Alignment.TopCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 Column(
                     Modifier
-                        .verticalScroll(rememberScrollState())
                         .width(500.dp)
                         .padding(horizontal = 20.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
