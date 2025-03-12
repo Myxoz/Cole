@@ -9,7 +9,6 @@ class Storage {
 class SPK {
     companion object {
         fun getContentKey(id: Int): String = "CONTENT_$id"
-
         const val FULL: String = "FULL"
         const val ID: String = "ID"
         const val SHORT: String = "SHORT"

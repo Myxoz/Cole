@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
             } else {
                 HomeScreen(applicationContext, API(privateToken!!, id), prefs) {
                     subScreen = it
+                    prefs.edit().putString(SPK.SUBSCREEN, it.json()).apply()
                     renderedSubScreen = it;
                     backPressed = { subScreen = null; backPressed = {} }
                 }
@@ -70,7 +71,10 @@ class MainActivity : ComponentActivity() {
                     enter = slideInHorizontally() {it} + fadeIn(),
                     exit = slideOutHorizontally() {it} + fadeOut()
                 ) {
-                    SubScreen(applicationContext, short, full, API(privateToken!!, id), prefs, renderedSubScreen) {subScreen=null}
+                    SubScreen(applicationContext, short, full, API(privateToken!!, id), prefs, renderedSubScreen) {
+                        prefs.edit().putString(SPK.SUBSCREEN, null).apply()
+                        subScreen=null
+                    }
                 }
             }
         }
