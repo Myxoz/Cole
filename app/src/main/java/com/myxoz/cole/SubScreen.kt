@@ -361,7 +361,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                             0,
                             0,
                             {
-                                val time = endedMap[it] ?: return@SliderOption "Jetzt"
+                                val time = endedMap[it]
                                 if (time == 0) return@SliderOption "Jetzt"
 
                                 val cal = Calendar.getInstance()

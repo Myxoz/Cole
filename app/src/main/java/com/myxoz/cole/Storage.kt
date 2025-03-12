@@ -3,9 +3,6 @@ package com.myxoz.cole
 import org.json.JSONArray
 import org.json.JSONObject
 
-class Storage {
-
-}
 class SPK {
     companion object {
         fun getContentKey(id: Int): String = "CONTENT_$id"

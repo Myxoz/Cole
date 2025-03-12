@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                 HomeScreen(applicationContext, API(privateToken!!, id), prefs, homeScreenRefreshSubscription) {
                     subScreen = it
                     prefs.edit().putString(SPK.SUBSCREEN, it.json()).apply()
-                    renderedSubScreen = it;
+                    renderedSubScreen = it
                 }
                 AnimatedVisibility(
                     subScreen!=null,
