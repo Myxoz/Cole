@@ -297,6 +297,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                 ) {
                     Column(
                         Modifier
+                            .verticalScroll(rememberScrollState())
                             .padding(horizontal = 50.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
