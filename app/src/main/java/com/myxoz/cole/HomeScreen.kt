@@ -45,11 +45,14 @@ import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, openSubScreen: (SubScreen) -> Unit) {
+fun HomeScreen(applicationContext: Context, api: API, prefs: SharedPreferences, homeScreenRefreshSubscription: Subscription<Boolean>, openSubScreen: (SubScreen) -> Unit) {
     var codesPopupOpen by remember { mutableStateOf(false) }
     var content by remember { mutableStateOf(prefs.getString(SPK.HOME, null)?.getAsHomeScreen()) }
     var isRefreshing by remember { mutableStateOf(false) }
     var lastRefreshedTs by remember { mutableLongStateOf(0L) }
+    homeScreenRefreshSubscription.register("home"){
+        lastRefreshedTs=-lastRefreshedTs
+    }
     LaunchedEffect(lastRefreshedTs) {
         val fetchedContent = api.getHomeScreenContent()
         isRefreshing=false
@@ -187,5 +190,14 @@ class HomeScreen(val topics: List<SummedTopic>, val topPeople: List<ScoredPerson
             .put("topics", topics.map { it.json().json }.asJSONArray())
             .put("top",topPeople.map { it.json().json }.asJSONArray())
             .toString()
+    }
+}
+class Subscription<T>{
+    private val subscriptionMap = mutableMapOf<String,(T)->Unit>()
+    fun register(key: String, func: (T)->Unit){
+        subscriptionMap[key]=func
+    }
+    fun send(data: T){
+        subscriptionMap.forEach { (_, u) -> u(data) }
     }
 }

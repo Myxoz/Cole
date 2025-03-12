@@ -91,7 +91,7 @@ val weekDays = listOf("Samstag", "Sonntag", "Montag", "Dienstag", "Mittwoch", "D
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubScreen(context: Context, short: String, full: String, api: API, prefs: SharedPreferences, subScreen: SubScreen, closeSubScreen: ()->Unit){
+fun SubScreen(context: Context, short: String, full: String, api: API, prefs: SharedPreferences, subScreen: SubScreen, homeScreenRefreshSubscription: Subscription<Boolean>, closeSubScreen: ()->Unit){
     var content by remember { mutableStateOf(prefs.getString(SPK.getContentKey(subScreen.id), null)?.getAsTopicContent()) }
     var addScreen by remember { mutableStateOf(TopicEntry(
         short,full,"",4,8,System.currentTimeMillis()
@@ -114,6 +114,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
         } else {
             content = fetchedContent.content.getAsTopicContent()
             prefs.edit().putString(SPK.getContentKey(subScreen.id), fetchedContent.content).apply()
+            homeScreenRefreshSubscription.send(true)
         }
         isFetching=false
     }

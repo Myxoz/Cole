@@ -60,7 +60,8 @@ class MainActivity : ComponentActivity() {
             if(privateToken==null) {
                 RegisterScreen(applicationContext, updateAfterLogin)
             } else {
-                HomeScreen(applicationContext, API(privateToken!!, id), prefs) {
+                val homeScreenRefreshSubscription = remember { Subscription<Boolean>() }
+                HomeScreen(applicationContext, API(privateToken!!, id), prefs, homeScreenRefreshSubscription) {
                     subScreen = it
                     prefs.edit().putString(SPK.SUBSCREEN, it.json()).apply()
                     renderedSubScreen = it;
@@ -71,7 +72,7 @@ class MainActivity : ComponentActivity() {
                     enter = slideInHorizontally() {it} + fadeIn(),
                     exit = slideOutHorizontally() {it} + fadeOut()
                 ) {
-                    SubScreen(applicationContext, short, full, API(privateToken!!, id), prefs, renderedSubScreen) {
+                    SubScreen(applicationContext, short, full, API(privateToken!!, id), prefs, renderedSubScreen, homeScreenRefreshSubscription) {
                         prefs.edit().putString(SPK.SUBSCREEN, null).apply()
                         subScreen=null
                     }
