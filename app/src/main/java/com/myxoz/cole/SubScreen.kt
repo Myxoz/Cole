@@ -543,7 +543,7 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
         Modifier
             .fillMaxWidth()
     ){
-        Text(name, style = MaterialTheme.typography.titleMedium.copy(Colors.FONT), textAlign = TextAlign.Center)
+        Text(name, style = MaterialTheme.typography.titleMedium.copy(Colors.FONT))
         Row(
             Modifier
                 .fillMaxWidth(),
@@ -568,7 +568,8 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
             )
             Text(
                 displayedValue(state.value.roundToInt()),
-                style = MaterialTheme.typography.titleSmall.copy(Colors.FONT)
+                style = MaterialTheme.typography.titleSmall.copy(Colors.FONT),
+                textAlign = TextAlign.Right
             )
         }
     }
