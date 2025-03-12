@@ -162,14 +162,14 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                     val cal = Calendar.getInstance()
                     val currentYear = cal.get(Calendar.YEAR)
                     val groupedByDates = content?.entries
-                        ?.sortedByDescending { it.end }
+                        ?.sortedByDescending { it.startInMs() }
                         ?.groupBy {
-                        cal.timeInMillis=it.end*1000L
+                        cal.timeInMillis=it.startInMs()
                         "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH)}-${cal.get(Calendar.DATE)}"
                     }
                     Column {
                         groupedByDates?.forEach {
-                            cal.timeInMillis = it.value[0].end*1000L
+                            cal.timeInMillis = it.value[0].startInMs()
                             val dateString =
                                 weekDays[cal.get(Calendar.DAY_OF_WEEK)] + " der " +
                                         cal.get(Calendar.DAY_OF_MONTH) +"." + (cal.get(Calendar.MONTH)).plus(1) +
@@ -186,7 +186,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                     .background(Colors.SEC),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                it.value.sortedBy { it.end }.forEachIndexed { index, item ->
+                                it.value.sortedByDescending { it.end }.forEachIndexed { index, item ->
                                     var isExpanded by remember { mutableStateOf(false) }
                                     if(index!=0) HorizontalDivider(
                                         Modifier
@@ -467,6 +467,7 @@ class TopicEntry(val short: String, val full: String, val summary: String, val l
     fun copy(short: String = this.short, full: String = this.full, summary: String = this.summary, length: Int = this.length, productivity: Int = this.productivity, end: Long = this.end): TopicEntry{
         return TopicEntry(short, full, summary, length, productivity, end)
     }
+    fun startInMs() = end*1000 - length*30*60*1000
 }
 fun Int.asHour(): String {
     return "${if(this>1) this/2 else ""}${if(this%2==1) "${if(this>1) " " else ""}½" else ""}h"
