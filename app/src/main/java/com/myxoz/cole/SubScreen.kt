@@ -259,13 +259,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                                 )
                                                 Spacer(Modifier.weight(1f))
                                                 Text(
-                                                    "${
-                                                        cal.get(Calendar.HOUR_OF_DAY).toString()
-                                                            .padStart(2, '0')
-                                                    }:${
-                                                        cal.get(Calendar.MINUTE).toString()
-                                                            .padStart(2, '0')
-                                                    } · ${item.length.asHour()} lang · ${item.productivity}0%",
+                                                    "${cal.asMinuteString()} · ${item.length.asHour()} lang · ${item.productivity}0%",
                                                     style = MaterialTheme.typography.bodyMedium.copy(
                                                         Colors.SFONT
                                                     )
@@ -286,12 +280,24 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                                 Column(
                                                     Modifier.padding(start = 50.dp)
                                                 ) {
-                                                    Text(
-                                                        "Zusammenfassung:",
-                                                        style = MaterialTheme.typography.titleSmall.copy(
-                                                            Colors.SFONT
+                                                    Row(
+                                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                    ) {
+                                                        Text(
+                                                            "Zusammenfassung:",
+                                                            style = MaterialTheme.typography.titleSmall.copy(
+                                                                Colors.SFONT
+                                                            )
                                                         )
-                                                    )
+                                                        Text(
+                                                        "(von ${cal.apply { timeInMillis=item.startInMs() }.asMinuteString()} bis ${cal.apply { timeInMillis=item.end*1000L }.asMinuteString()})",
+                                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                                Colors.SFONT
+                                                            )
+                                                        )
+                                                    }
                                                     Text(
                                                         item.summary,
                                                         style = MaterialTheme.typography.titleMedium.copy(
@@ -567,3 +573,4 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
         }
     }
 }
+fun Calendar.asMinuteString() = "${get(Calendar.HOUR_OF_DAY).toString().padStart(2, '0')}:${get(Calendar.MINUTE).toString() .padStart(2, '0')}"
