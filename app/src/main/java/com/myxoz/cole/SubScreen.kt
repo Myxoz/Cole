@@ -62,6 +62,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -71,21 +72,43 @@ import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.math.roundToInt
 
 val endedMap = listOf(
-    Pair(0, "Jetzt"),
-    Pair(10, "vor 10min"),
-    Pair(30, "vor 30min"),
-    Pair(60, "vor 1h"),
-    Pair(90, "vor 1 ½h"),
-    Pair(120, "vor 2h"),
-    Pair(180, "vor 3h"),
-    Pair(60*4, "vor 4h"),
-    Pair(60*6, "vor 6h"),
-    Pair(60*9, "vor 9h"),
-    Pair(60*12, "vor 12h"),
-    Pair(60*18, "vor 18h"),
-    Pair(60*24, "vor 1d"),
-    Pair(60*36, "vor 1 ½d"),
-    Pair(60*48, "vor 2d"),
+    0,
+    5,
+    10,
+    15,
+    20,
+    30,
+    45,
+    60,
+    75,
+    90,
+    105,
+    120,
+    150,
+    180,
+    30*7,
+    30*8,
+    30*9,
+    30*10,
+    60*6,
+    60*7,
+    60*8,
+    60*9,
+    60*10,
+    60*11,
+    60*12,
+    60*14,
+    60*16,
+    60*18,
+    60*20,
+    60*22,
+    60*24,
+    60*28,
+    60*32,
+    60*36,
+    60*40,
+    60*44,
+    60*48
 )
 val weekDays = listOf("Samstag", "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag")
 
@@ -332,13 +355,32 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                             0,
                             0,
                             {
-                                endedMap[it].second
+                                val time = endedMap[it] ?: return@SliderOption "Jetzt"
+                                if (time == 0) return@SliderOption "Jetzt"
+
+                                val cal = Calendar.getInstance()
+                                cal.timeInMillis -= time * 60 * 1000 // Convert minutes to milliseconds
+
+                                val now = Calendar.getInstance()
+                                val diffDays = now.get(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR)
+
+                                val prefix = when (diffDays) {
+                                    0 -> "Heute"
+                                    1 -> "Gestern"
+                                    2 -> "Vorgestern"
+                                    else -> "Vorvorgestern"
+                                }
+
+                                val formattedTime = cal.get(Calendar.HOUR_OF_DAY).toString().padStart(2, '0') + ":" +
+                                        cal.get(Calendar.MINUTE).toString().padStart(2, '0')
+
+                                return@SliderOption "$prefix, $formattedTime"
                             }
                         ) {
                             addScreen=addScreen.copy(
-                                end = System.currentTimeMillis() - endedMap[it].first*1000L*60L
+                                end = System.currentTimeMillis() - endedMap[it]*1000L*60L
                             )
-                            println("${System.currentTimeMillis()} - ${endedMap[it].first*1000L*60L}")
+                            println("${System.currentTimeMillis()} - ${endedMap[it]*1000L*60L}")
                         }
                         Column(
                             Modifier
@@ -495,7 +537,7 @@ fun SliderOption(name: String, steps: Int, start: Int, defVal: Int, displayedVal
         Modifier
             .fillMaxWidth()
     ){
-        Text(name, style = MaterialTheme.typography.titleMedium.copy(Colors.FONT))
+        Text(name, style = MaterialTheme.typography.titleMedium.copy(Colors.FONT), textAlign = TextAlign.Center)
         Row(
             Modifier
                 .fillMaxWidth(),
