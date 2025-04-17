@@ -68,14 +68,14 @@ fun Leaderboard(topPeople: List<ScoredPerson>?) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "4. ${topPeople[3].full} • ${topPeople[3].score}",
+                        "4. ${topPeople[3].full} • ${topPeople[3].score.display()}",
                         style = MaterialTheme.typography.titleSmall.copy(
                             topPeople[3].score.getColor(max)
                         )
                     )
                     if(topPeople.size > 4) {
                         Text(
-                            "5. ${topPeople[4].full} • ${topPeople[4].score}",
+                            "5. ${topPeople[4].full} • ${topPeople[4].score.display()}",
                             style = MaterialTheme.typography.titleSmall.copy(
                                 topPeople[4].score.getColor(max)
                             )
@@ -116,7 +116,7 @@ fun RowScope.Tower(person: ScoredPerson, max: Int){
         }
         Spacer(Modifier.height(5.dp))
         Text(
-            person.score.toString(),
+            person.score.display(),
             Modifier
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,

@@ -43,7 +43,7 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
                     style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
                 )
                 Text(
-                    topic.totalScore.toString(),
+                    topic.totalScore.display(),
                     style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
                 )
             }
@@ -68,4 +68,4 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
         }
     }
 }
-
+fun Int.display() = toString().reversed().chunked(3).joinToString(".").reversed()
