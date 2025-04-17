@@ -318,6 +318,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
             FloatingActionButton(
                 {
                     isAddScreenVisible=!isAddScreenVisible
+                    addScreen=addScreen.copy(end = System.currentTimeMillis())
                 },
                 Modifier
                     .padding(30.dp)
@@ -341,7 +342,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                             "Länge",
                             20,
                             1,
-                            4,
+                            addScreen.length,
                             {it.asHour()}
                         ) {
                             addScreen=addScreen.copy(length = it)
@@ -350,7 +351,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                             "Produktivität",
                             11,
                             0,
-                            8,
+                            addScreen.productivity,
                             {"${it*10}%"}
                         ) {
                             addScreen=addScreen.copy(productivity = it)
@@ -423,7 +424,6 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                             style = MaterialTheme.typography.titleSmall.copy(Colors.SFONT)
                                         )
                                     },
-                                    maxLines = 1,
                                 )
                             }
                         }
