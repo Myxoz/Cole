@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -38,10 +39,19 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    topic.name,
-                    style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        topic.name,
+                        style = MaterialTheme.typography.titleLarge.copy(Colors.FONT)
+                    )
+                    Text(
+                        "("+topic.totalTime.asHour()+")",
+                        style = MaterialTheme.typography.labelSmall.copy(Colors.SFONT)
+                    )
+                }
                 Text(
                     topic.totalScore.display(),
                     style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
@@ -49,8 +59,11 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
             }
             val max = topic.topPeople.getOrNull(0)?.score?:0
             if(topic.topPeople.isNotEmpty()) {
-                Spacer(Modifier.height(5.dp))
+                Spacer(Modifier.height(10.dp))
                 Row(
+                    Modifier
+                        .padding(start = 10.dp)
+                    ,
                     horizontalArrangement = Arrangement.spacedBy(20.dp)
                 ){
                     repeat(3) {
@@ -58,8 +71,10 @@ fun TopicBoard(topic: SummedTopic, openSubScreen: (SubScreen) -> Unit) {
                             Text(
                                 "${it+1}. $full · $score",
                                 style = MaterialTheme.typography.bodySmall.copy(
-                                    score.getColor(max)
-                                )
+                                    score.getColor(max).copy(.75f)
+                                ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }

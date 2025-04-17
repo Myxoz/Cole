@@ -519,9 +519,7 @@ class TopicEntry(val short: String, val full: String, val summary: String, val l
     }
     fun startInMs() = end*1000 - length*30*60*1000
 }
-fun Int.asHour(): String {
-    return "${if(this>1) this/2 else ""}${if(this%2==1) "${if(this>1) " " else ""}½" else ""}h"
-}
+fun Int.asHour() = if(this != -1) "${if(this>1) this/2 else ""}${if(this%2==1) "${if(this>1) " " else ""}½" else ""}h" else "Lädt..."
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
