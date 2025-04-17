@@ -14,9 +14,15 @@ class SPK {
         const val HOME = "HOME"
     }
 }
-class SummedTopic(val totalScore: Int, val topPeople: List<ScoredPerson>, val name: String, val id: Int): JSONAble() {
+class SummedTopic(val totalScore: Int, val topPeople: List<ScoredPerson>, val name: String, val id: Int, val totalTime: Int): JSONAble() {
     override fun json(): String {
-        return JSONObject().put("total", totalScore).put("top", topPeople.map { it.json().json }.asJSONArray()).put("id",id).put("name",name).toString()
+        return JSONObject()
+            .put("total", totalScore)
+            .put("top", topPeople.map { it.json().json }.asJSONArray())
+            .put("id",id)
+            .put("name",name)
+            .put("totalTime",totalTime)
+            .toString()
     }
 }
 
@@ -26,9 +32,9 @@ open class Person(val full: String, val short: String): JSONAble() {
     }
 }
 
-class ScoredPerson(full: String, short: String, val score: Int):  Person(full, short) {
+class ScoredPerson(full: String, short: String, val score: Int, val totalTime: Int):  Person(full, short) {
     override fun json(): String {
-        return JSONObject().put("full", full).put("short", short).put("score", score).toString()
+        return JSONObject().put("full", full).put("short", short).put("score", score).put("total", totalTime).toString()
     }
 }
 fun List<JSONObject>.asJSONArray(): JSONArray{

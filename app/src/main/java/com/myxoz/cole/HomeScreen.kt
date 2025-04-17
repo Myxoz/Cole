@@ -179,12 +179,12 @@ fun String?.getAsHomeScreen(): HomeScreen?{
     val json = this?.json?:return null
     println(this)
     return HomeScreen(
-        json.getJSONArray("topics").jsonObjArray.map {
-            SummedTopic(it.getInt("total"), it.getJSONArray("top").jsonObjArray.map {
-                ScoredPerson(it.getString("full"), it.getString("short"), it.getInt("score"))
-            }, it.getString("name"), it.getInt("id"))
+        json.getJSONArray("topics").jsonObjArray.map { topic ->
+            SummedTopic(topic.getInt("total"), topic.getJSONArray("top").jsonObjArray.map {
+                ScoredPerson(it.getString("full"), it.getString("short"), it.getInt("score"), -1) // Not displayed
+            }, topic.getString("name"), topic.getInt("id"), safe{topic.getInt("totalTime")}?:-1) // Needs safe for migration
         },
-        json.getJSONArray("top").jsonObjArray.map { ScoredPerson(it.getString("full"), it.getString("short"), it.getInt("score")) }
+        json.getJSONArray("top").jsonObjArray.map { ScoredPerson(it.getString("full"), it.getString("short"), it.getInt("score"),safe{it.getInt("total")}?:-1)} // Needed cause the data needs to migrate
     )
 }
 class HomeScreen(val topics: List<SummedTopic>, val topPeople: List<ScoredPerson>): JSONAble() {
@@ -202,5 +202,12 @@ class Subscription<T>{
     }
     fun send(data: T){
         subscriptionMap.forEach { (_, u) -> u(data) }
+    }
+}
+fun <T>safe(func: ()->T): T?{
+    return try {
+        func()
+    } catch (e: Exception) {
+        null
     }
 }

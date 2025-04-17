@@ -180,7 +180,7 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                     }
                     val people = content?.entries
                         ?.groupBy { it.short }?.values
-                        ?.map { ScoredPerson(it[0].full, it[0].short, it.sumOf { it.getScore() }) }
+                        ?.map { ScoredPerson(it[0].full, it[0].short, it.sumOf { it.getScore() }, it.sumOf { it.length }) }
                         ?.sortedByDescending { it.score }
                     Spacer(Modifier.height(10.dp))
                     Leaderboard(people)

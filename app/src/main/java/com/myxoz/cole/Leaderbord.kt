@@ -115,13 +115,24 @@ fun RowScope.Tower(person: ScoredPerson, max: Int){
             )
         }
         Spacer(Modifier.height(5.dp))
-        Text(
-            person.score.display(),
-            Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
-        )
+        Column {
+            Text(
+                person.score.display(),
+                Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                lineHeight = MaterialTheme.typography.titleMedium.fontSize,
+                style = MaterialTheme.typography.titleMedium.copy(Colors.FONT)
+            )
+            Text(
+                "("+person.totalTime.asHour()+")",
+                Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                lineHeight = MaterialTheme.typography.labelSmall.fontSize,
+                style = MaterialTheme.typography.labelSmall.copy(Colors.SFONT)
+            )
+        }
         Box(
             Modifier
                 .fillMaxWidth(.8f)
