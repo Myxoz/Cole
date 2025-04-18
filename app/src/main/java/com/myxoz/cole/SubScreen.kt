@@ -269,7 +269,8 @@ fun SubScreen(context: Context, short: String, full: String, api: API, prefs: Sh
                                                     item.getScore().toString(),
                                                     style = MaterialTheme.typography.titleLarge.copy(
                                                         Colors.FONT
-                                                    )
+                                                    ),
+                                                    maxLines = 1
                                                 )
                                             }
                                             AnimatedVisibility(
